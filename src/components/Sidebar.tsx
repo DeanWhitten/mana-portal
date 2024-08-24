@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch,faCog } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar: React.FC = () => {
   return (
@@ -12,6 +12,12 @@ const Sidebar: React.FC = () => {
           <Link to="/browse">
             <FontAwesomeIcon icon={faSearch} style={{ marginRight: '8px' }} />
             Browse
+          </Link>
+        </li>
+        <li className="sidebar-list-item">
+          <Link to="/settings">
+            <FontAwesomeIcon icon={faCog} style={{ marginRight: '8px' }} />
+            Settings
           </Link>
         </li>
         {/* Add more menu items here as needed */}

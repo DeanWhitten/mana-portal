@@ -1,0 +1,75 @@
+body.dark-mode {
+  background-color: black;
+  color: white;
+  p {
+    color: rgb(211, 30, 30);
+  }
+
+  .sidebar {
+    background-color: black;
+    color: white;
+    .sidebar-content {
+      color: white;
+      background-color: black;
+    }
+    :visited {
+      color: white;
+    }
+
+    li {
+      :hover {
+        color: #474747; /* Darken the color on hover */
+        //background-color: #dfdfdf22;
+        background-image: radial-gradient(circle, #131313 0%, #2a2a2a 100%);
+        transition: 0.3s;
+      }
+    }
+  }
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.692);
+    p,
+    div,
+    span {
+      color: rgb(157, 157, 157);
+    }
+    .overlay-content {
+      color: white;
+      background-color: black;
+      box-shadow: 0px 0px 100px 0px rgba(134, 134, 134, 0.381);
+
+      .overlay-content-img {
+        box-shadow: 0px 0px 10px 0px rgba(134, 134, 134, 0.75);
+      }
+    }
+  }
+
+  .search-page {
+    .card-list {
+      background-color: rgba(41, 41, 41, 0.805);
+      .card {
+        .card-img {
+          box-shadow: rgb(0, 0, 0) 0px 10px 25px;
+        }
+      }
+    }
+  }
+
+  .search-container {
+    background-color: rgb(30, 30, 30);
+    color: white;
+  }
+
+  .pagination {
+    background-color: rgb(30, 30, 30);
+    input,
+    select {
+      background-color: rgb(30, 30, 30);
+      color: white;
+    }
+    .pagination-btn {
+      background-color: rgb(30, 30, 30);
+      color: white;
+    }
+  }
+}
