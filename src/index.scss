@@ -1,0 +1,21 @@
+@import 'styles/base/reset';
+@import 'styles/base/variables';
+@import 'styles/base/mixins';
+@import 'styles/base/globals';
+
+@import 'styles/layout/layout';
+@import 'styles/layout/sidebar';
+@import 'styles/layout/cardList';
+
+@import 'styles/components/button';
+@import 'styles/components/searchbar';
+@import 'styles/components/pagenation';
+@import 'styles/components/cardOverlay';
+@import 'styles/components/card';
+
+@import 'styles/pages/searchPage';
+
+@import 'styles/themes/dark';
+@import 'styles/themes/light';
+
+@import 'antd/dist/reset.css';

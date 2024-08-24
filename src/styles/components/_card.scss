@@ -1,0 +1,21 @@
+.card{
+    height: 30vh;
+    width: 12vw;
+    cursor: pointer;
+    margin: 2em;
+    .card-img{
+        box-shadow: grey 0px 10px 25px;
+        height: 100%;
+        width: 100%;
+        border-radius: 9px;
+    }
+}
+
+.card:hover{
+    position: relative;
+    align-self: center;
+    z-index: 0;
+
+    transform: scale(1.5);
+    transition: transform 0.2s;
+}

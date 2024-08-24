@@ -1,0 +1,12 @@
+.card-list{
+    //position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 6vw;
+    padding-top: 10vh; 
+    height: 100vh;
+    overflow: scroll;
+    background-color:rgba(214, 214, 214, 0.805);
+    z-index: -1;
+    padding-bottom: 8vh;
+}
