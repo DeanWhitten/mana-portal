@@ -1,6 +1,6 @@
 import React from 'react';
 import { Descriptions} from 'antd';
-import { Card } from '../types/Card/Card';
+import { Card } from '../types/Card';
 import 'antd/dist/reset.css';
 
 
@@ -8,8 +8,6 @@ interface OverlayProps {
   card: Card;
   onClose: () => void;
 }
-
-
 
 const Overlay: React.FC<OverlayProps> = ({ card, onClose }) => {
 

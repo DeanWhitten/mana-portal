@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CardResponse } from '../../types/Card/Card';
-import { Card } from '../../types/Card/Card';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { CardResponse } from "../../types/Card";
+import { Card } from "../../types/Card";
 
 // Define a type for the slice state
 interface CardsState {
@@ -8,7 +8,7 @@ interface CardsState {
   totalElements: number;
   currentPage: number;
   pageSize: number;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
 }
 
 // Initial state
@@ -17,20 +17,20 @@ const initialState: CardsState = {
   totalElements: 0,
   currentPage: 0,
   pageSize: 20,
-  status: 'idle',
+  status: "idle",
 };
 
 // Create async thunk for fetching cards with filters
 export const fetchCards = createAsyncThunk(
-  'cards/fetchCards',
+  "cards/fetchCards",
   async ({
     page,
     size,
-    search = '',
-    rarity = '',
-    type = '',
-    color = '',
-    set = ''
+    search = "",
+    rarity = "",
+    type = "",
+    color = "",
+    set = "",
   }: {
     page: number;
     size: number;
@@ -41,12 +41,14 @@ export const fetchCards = createAsyncThunk(
     set?: string;
   }) => {
     try {
-      const response = await fetch(`http://localhost:8080/cards?page=${page}&size=${size}&search=${search}&rarity=${rarity}&type=${type}&color=${color}&set=${set}`);
+      const response = await fetch(
+        `http://localhost:8080/cards?page=${page}&size=${size}&search=${search}&rarity=${rarity}&type=${type}&color=${color}&set=${set}`
+      );
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       const data: CardResponse = await response.json();
-      console.log('API Response:', data); // Log API response
+      console.log("API Response:", data); // Log API response
       return {
         cards: data.content,
         totalElements: data.totalElements,
@@ -54,7 +56,7 @@ export const fetchCards = createAsyncThunk(
         pageSize: data.pageable.pageSize,
       };
     } catch (error) {
-      console.error('Fetch cards failed:', error); // Log error
+      console.error("Fetch cards failed:", error); // Log error
       throw error;
     }
   }
@@ -62,32 +64,37 @@ export const fetchCards = createAsyncThunk(
 
 // Create slice
 const cardsSlice = createSlice({
-  name: 'cards',
+  name: "cards",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCards.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
-      .addCase(fetchCards.fulfilled, (state, action: PayloadAction<{
-        cards: Card[];
-        totalElements: number;
-        currentPage: number;
-        pageSize: number;
-      }>) => {
-        console.log('Cards Loaded:', action.payload.cards); // Log cards loaded
-        state.cards = action.payload.cards;
-        state.totalElements = action.payload.totalElements;
-        state.currentPage = action.payload.currentPage;
-        state.pageSize = action.payload.pageSize;
-        state.status = 'succeeded';
-      })
+      .addCase(
+        fetchCards.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            cards: Card[];
+            totalElements: number;
+            currentPage: number;
+            pageSize: number;
+          }>
+        ) => {
+          console.log("Cards Loaded:", action.payload.cards); // Log cards loaded
+          state.cards = action.payload.cards;
+          state.totalElements = action.payload.totalElements;
+          state.currentPage = action.payload.currentPage;
+          state.pageSize = action.payload.pageSize;
+          state.status = "succeeded";
+        }
+      )
       .addCase(fetchCards.rejected, (state) => {
-        state.status = 'failed';
+        state.status = "failed";
       });
   },
 });
 
 export default cardsSlice.reducer;
-
