@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -27,15 +27,19 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const handlePageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const pageNumber = parseInt(event.target.value, 10);
     if (!isNaN(pageNumber)) {
       setInputPage(pageNumber);
     }
   };
 
-  const handlePageInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+  const handlePageInputSubmit = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
       const newPage = inputPage - 1;
       if (newPage >= 0 && newPage < totalPages) {
         onPageChange(newPage);
@@ -45,7 +49,9 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleItemsPerPageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const newItemsPerPage = parseInt(event.target.value, 10);
     onItemsPerPageChange(newItemsPerPage);
   };
@@ -59,16 +65,16 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         Previous
       </button>
-      
+
       <input
         type="number"
         value={inputPage}
         onChange={handlePageInputChange}
         onKeyDown={handlePageInputSubmit}
-        style={{ width: '50px', textAlign: 'center', margin: '0 8px' }}
+        style={{ width: "50px", textAlign: "center", margin: "0 8px" }}
       />
       <span>{`of ${totalPages}`}</span>
-      
+
       <button
         className="pagination-btn"
         onClick={() => handlePageChange(currentPage + 1)}
@@ -76,11 +82,11 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         Next
       </button>
-      
+
       <select
         value={itemsPerPage}
         onChange={handleItemsPerPageChange}
-        style={{ marginLeft: '16px' }}
+        style={{ marginLeft: "16px" }}
       >
         {[5, 10, 15, 20, 25, 50].map((value) => (
           <option key={value} value={value}>{`${value} per page`}</option>
@@ -91,4 +97,3 @@ const Pagination: React.FC<PaginationProps> = ({
 };
 
 export default Pagination;
-

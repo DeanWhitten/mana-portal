@@ -1,6 +1,6 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 
 interface ToolbarProps {
   onSearch: (query: string) => void;
@@ -8,7 +8,7 @@ interface ToolbarProps {
 }
 
 const Searchbar: React.FC<ToolbarProps> = ({ onSearch, onFilterChange }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<any>({});
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +16,7 @@ const Searchbar: React.FC<ToolbarProps> = ({ onSearch, onFilterChange }) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearchSubmit();
     }
   };
@@ -44,9 +44,10 @@ const Searchbar: React.FC<ToolbarProps> = ({ onSearch, onFilterChange }) => {
           onKeyDown={handleKeyDown}
         />
         <button onClick={handleSearchSubmit}>
-        <FontAwesomeIcon icon={faSearch} style={{ marginRight: '8px' }} />
+          <FontAwesomeIcon icon={faSearch} style={{ marginRight: "8px" }} />
         </button>
-      </div> {/* 
+      </div>{" "}
+      {/* 
       <div className="filters">
         <select className='selector' name="rarity" onChange={handleFilterChange} >
           <option value="">Select Rarity</option>
