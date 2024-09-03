@@ -1,9 +1,10 @@
 .search-container{
     display: flex;
     position: fixed;
+    top: 5vh;
     flex-direction: row;
     width: 90vw;
-    background-color: lightgray;
+   
     z-index: 99999;
     height: 5vh;
     padding-left: 2em;
@@ -13,12 +14,13 @@
         margin: .2em;
     }
     input{
-        padding: 0.5em;
+        height: 4vh;
         width: 15vw;
         border: none;
     }
     button{
-        padding: 0.5em;
+       height: 4vh;
+       width: 5vw;
         background-color: #007bff;
         color: white;
         border: none;

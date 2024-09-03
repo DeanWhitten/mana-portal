@@ -4,9 +4,9 @@
     position: fixed;
     left: 0;
     top:0;
-    background-color: #f4f4f4;
+
     padding: 1em;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    
     h2{
         text-align: center;
         margin-top: 2em;
@@ -18,12 +18,10 @@
         margin: 0;
         /* Optional: Adding hover state */ 
     :visited{ 
-        color: #000;
+      
     }
    :hover { 
-        color: #474747; /* Darken the color on hover */ 
-        //background-color: #dfdfdf22;
-        background-image: radial-gradient(circle, #fff 0%, #f9f9f9 100%);
+       
          transition: 0.3s;
     } 
         
@@ -34,8 +32,6 @@
         color: #000;
         display: block;  
         border-bottom: 1px solid #00000018; 
-
     }
-    
     
 }

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCards } from "../../features/cards/cardsSlice";
 import { RootState } from "../../store";
-import CardList from "./../CardList";
+import CardList from "../card/CardList";
 import Pagination from "./../Pagination";
 import { Dispatch } from "@reduxjs/toolkit";
-import CardDetailsOverlay from "./../CardOverlay"; // Import the CardDetailsOverlay component
+import CardDetailsOverlay from "./../card/CardOverlay"; // Import the CardDetailsOverlay component
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "../../types/Card";
 import Searchbar from "./../Searchbar";
+import PageHeader from "../PageHeader";
 
 const CardPage: React.FC = () => {
   const dispatch = useDispatch<Dispatch<any>>();
@@ -61,7 +62,8 @@ const CardPage: React.FC = () => {
   };
 
   return (
-    <div className="search-page">
+    <div className="search-page img-bg">
+      <PageHeader title="Browse" />
       <Searchbar onSearch={handleSearch} onFilterChange={handleFilterChange} />
       {cards.length === 0 ? (
         <p>No cards available</p>

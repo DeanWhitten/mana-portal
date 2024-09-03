@@ -1,7 +1,7 @@
 // components/CardList.tsx
 import React from "react";
 import Card from "./Card";
-import { Card as CardType } from "../types/Card";
+import { Card as CardType } from "../../types/Card";
 
 interface CardListProps {
   cards?: CardType[]; // Make cards optional

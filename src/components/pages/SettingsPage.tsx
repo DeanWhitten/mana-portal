@@ -6,6 +6,7 @@ import {
   setThemeMode,
   clearLocalStorage,
 } from "../../features/settings/settingsSlice";
+import PageHeader from "../PageHeader";
 
 const SettingsPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,8 +33,9 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="settings-page">
-      <h2>Settings</h2>
+    <div className="settings-page img-bg ">
+     <PageHeader title="Settings" /> 
+     <div className="page">
       <div className="setting-item">
         <label>
           <input
@@ -55,7 +57,8 @@ const SettingsPage: React.FC = () => {
         </label>
       </div>
       <div className="setting-item">
-        <button onClick={handleClearLocalStorage}>Clear Local Storage</button>
+        <button className="btn" onClick={handleClearLocalStorage}>Clear Local Storage</button>
+      </div>
       </div>
     </div>
   );

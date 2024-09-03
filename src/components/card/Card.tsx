@@ -2,10 +2,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
-import { Card as CardType } from "../types/Card";
+import { Card as CardType } from "../../types/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleFavorite } from "../features/favorites/favoritesSlice";
-import { RootState } from "../store";
+import { toggleFavorite } from "../../features/favorites/favoritesSlice";
+import { RootState } from "../../store";
 
 interface CardProps {
   card: CardType;
@@ -31,7 +31,7 @@ const Card: React.FC<CardProps> = ({ card, onClick }) => {
           icon={isFavorited ? faStar : faStarHalfAlt}
           className="favorite-icon"
           onClick={handleFavoriteToggle}
-          style={{ color: isFavorited ? "gold" : "gray" }}
+          style={{ color: isFavorited ? "gold" : "gray", position: "sticky" }}
         />
         <img className="card-img" src={card.normalImageUri} alt={card.name} />
       </div>

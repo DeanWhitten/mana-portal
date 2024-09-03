@@ -1,6 +1,6 @@
 import React from 'react';
 import { Descriptions} from 'antd';
-import { Card } from '../types/Card';
+import { Card } from '../../types/Card';
 import 'antd/dist/reset.css';
 
 
