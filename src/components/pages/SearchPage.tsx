@@ -3,19 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCards } from "../../features/cards/cardsSlice";
 import { RootState } from "../../store";
 import CardList from "../card/CardList";
-import Pagination from "./../Pagination";
-import { Dispatch } from "@reduxjs/toolkit";
-import CardDetailsOverlay from "./../card/CardOverlay"; // Import the CardDetailsOverlay component
+import Pagination from "../Pagination";
+import CardDetailsOverlay from "../card/CardOverlay";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "../../types/Card";
-import Searchbar from "./../Searchbar";
+import Searchbar from "../Searchbar";
 import PageHeader from "../PageHeader";
+import { Dispatch } from "@reduxjs/toolkit";
 
 const CardPage: React.FC = () => {
   const dispatch = useDispatch<Dispatch<any>>();
-  const { cards, totalElements } = useSelector(
-    (state: RootState) => state.cards
-  );
+  const { cards, totalElements } = useSelector((state: RootState) => state.cards);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,7 +27,7 @@ const CardPage: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
 
   useEffect(() => {
-    dispatch(fetchCards({ page, size: itemsPerPage, search: searchQuery }));
+    dispatch(fetchCards({ page, size: itemsPerPage, search: searchQuery, ...filters }));
   }, [dispatch, page, itemsPerPage, searchQuery, filters]);
 
   useEffect(() => {
@@ -46,8 +44,9 @@ const CardPage: React.FC = () => {
     setSelectedCard(null);
   };
 
-  const handleSearch = (query: string) => {
+  const handleSearch = (query: string, filters: any) => {
     setSearchQuery(query);
+    setFilters(filters); // Update filters along with search query
     setPage(0); // Reset to the first page on search
   };
 

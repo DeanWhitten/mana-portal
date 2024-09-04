@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CardResponse } from "../../types/Card";
-import { Card } from "../../types/Card";
+import { CardResponse, Card } from "../../types/Card";
+import { getCardsFromCatalog } from "../../utils/indexedDB";
 
 // Define a type for the slice state
 interface CardsState {
@@ -48,7 +48,6 @@ export const fetchCards = createAsyncThunk(
         throw new Error("Network response was not ok");
       }
       const data: CardResponse = await response.json();
-      console.log("API Response:", data); // Log API response
       return {
         cards: data.content,
         totalElements: data.totalElements,
@@ -56,8 +55,32 @@ export const fetchCards = createAsyncThunk(
         pageSize: data.pageable.pageSize,
       };
     } catch (error) {
-      console.error("Fetch cards failed:", error); // Log error
-      throw error;
+      console.error("Fetch cards failed:", error);
+
+      // If the API fetch fails, fall back to IndexedDB
+      const localCards = await getCardsFromCatalog();
+
+      // Filter and search logic for IndexedDB cards
+      const filteredCards = localCards.filter((card) => {
+        return (
+          (search ? card.name.toLowerCase().includes(search.toLowerCase()) : true) &&
+          (rarity ? card.rarity === rarity : true) &&
+          (type ? card.typeLine.toLowerCase().includes(type.toLowerCase()) : true) &&
+          (color ? card.colors.includes(color) : true) &&
+          (set ? card.setName === set : true)
+        );
+      });
+
+      // Paginate the filtered cards
+      const startIndex = page * size;
+      const paginatedCards = filteredCards.slice(startIndex, startIndex + size);
+
+      return {
+        cards: paginatedCards,
+        totalElements: filteredCards.length,
+        currentPage: page,
+        pageSize: size,
+      };
     }
   }
 );
@@ -83,7 +106,6 @@ const cardsSlice = createSlice({
             pageSize: number;
           }>
         ) => {
-          console.log("Cards Loaded:", action.payload.cards); // Log cards loaded
           state.cards = action.payload.cards;
           state.totalElements = action.payload.totalElements;
           state.currentPage = action.payload.currentPage;

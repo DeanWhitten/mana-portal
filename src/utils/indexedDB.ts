@@ -12,10 +12,13 @@ const dbPromise = openDB("ManaVaultDB", 2, {
       db.createObjectStore("settings", { keyPath: "id" });
     }
     if (!db.objectStoreNames.contains("catalog")) {
-      db.createObjectStore("catalog", { keyPath: "cardId" });
+      const store = db.createObjectStore("catalog", { keyPath: "cardId" });
+      store.createIndex("rarityIndex", "rarity");
+      // Create other indexes if needed
     }
   },
 });
+
 
 const defaultSettings: SettingsState = {
   offlineMode: false,
@@ -157,5 +160,99 @@ export const clearCatalog = async () => {
     console.log("Catalog cleared successfully");
   } catch (error) {
     console.error("Failed to clear catalog:", error);
+  }
+};
+
+export const getCardsFromCatalog = async (): Promise<Card[]> => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readwrite");
+    const store = tx.objectStore("catalog");
+    const favorites = await store.getAll();
+    await tx.done;
+    return favorites;
+  } catch (error) {
+    console.error("Failed to get Catalog:", error);
+    return [];
+  }
+};
+
+// Get cards by filters from catalog
+export const getCardsByFilters = async (filters: { rarity?: string; color?: string; [key: string]: any }) => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readonly");
+    const store = tx.objectStore("catalog");
+
+    // Apply filters
+    let indexName: string | null = null;
+    let range: IDBKeyRange | undefined = undefined;
+
+    if (filters.rarity) {
+      indexName = "rarityIndex";
+      range = IDBKeyRange.only(filters.rarity);
+    } else if (filters.color) {
+      indexName = "colorIndex";
+      range = IDBKeyRange.only(filters.color);
+    }
+
+    let request;
+    if (indexName) {
+      const index = store.index(indexName);
+      request = index.getAll(range);
+    } else {
+      request = store.getAll();
+    }
+
+    const results = await request;
+    await tx.done;
+    return results;
+  } catch (error) {
+    console.error("Failed to get filtered cards:", error);
+    return [];
+  }
+};
+
+// Get a page of cards from catalog with optional filters
+export const getCardsPage = async (page: number, pageSize: number, filters: { rarity?: string; color?: string[] }) => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readonly");
+    const store = tx.objectStore("catalog");
+
+    let indexName: string | null = null;
+    let range: IDBKeyRange | undefined = undefined;
+
+    if (filters.rarity) {
+      indexName = "rarityIndex";
+      range = IDBKeyRange.only(filters.rarity);
+    } else if (filters.color) {
+      indexName = "colorIndex";
+      range = IDBKeyRange.only(filters.color);
+    }
+
+    const results: Card[] = [];
+    if (indexName) {
+      const index = store.index(indexName);
+      let cursor = await index.openCursor(range);
+
+      let count = 0;
+      while (cursor && count < pageSize) {
+        if (count >= (page - 1) * pageSize) {
+          results.push(cursor.value);
+        }
+        cursor = await cursor.continue();
+        count++;
+      }
+    } else {
+      const allCards = await store.getAll();
+      results.push(...allCards.slice((page - 1) * pageSize, page * pageSize));
+    }
+
+    await tx.done;
+    return results;
+  } catch (error) {
+    console.error("Failed to get paginated cards:", error);
+    return [];
   }
 };
