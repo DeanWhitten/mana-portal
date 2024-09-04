@@ -42,7 +42,7 @@ export const fetchCards = createAsyncThunk(
   }) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/cards?page=${page}&size=${size}&search=${search}&rarity=${rarity}&type=${type}&color=${color}&set=${set}`
+        `http://localhost:8080/api/cards/?page=${page}&size=${size}&search=${search}&rarity=${rarity}&type=${type}&color=${color}&set=${set}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

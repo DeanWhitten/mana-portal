@@ -33,8 +33,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+
     ]
   },
   "browserslist": {
@@ -51,5 +50,6 @@
   },
   "devDependencies": {
     "sass": "^1.77.8"
-  }
+  },
+    "proxy": "http://localhost:8080"
 }

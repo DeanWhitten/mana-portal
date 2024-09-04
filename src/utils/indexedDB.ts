@@ -1,16 +1,18 @@
-import { openDB } from "idb";
+import { openDB, IDBPDatabase } from "idb";
 import { Card } from "../types/Card";
 import { SettingsState } from "../types/Settings";
 
 // Open the IndexedDB and upgrade schema if necessary
 const dbPromise = openDB("ManaVaultDB", 2, {
-  // Incremented version number
   upgrade(db) {
     if (!db.objectStoreNames.contains("favorites")) {
       db.createObjectStore("favorites", { keyPath: "cardId" });
     }
     if (!db.objectStoreNames.contains("settings")) {
       db.createObjectStore("settings", { keyPath: "id" });
+    }
+    if (!db.objectStoreNames.contains("catalog")) {
+      db.createObjectStore("catalog", { keyPath: "cardId" });
     }
   },
 });
@@ -20,27 +22,27 @@ const defaultSettings: SettingsState = {
   themeMode: "light",
 };
 
-// Add favorite card
+// Add a favorite card
 export const addFavorite = async (card: Card) => {
   try {
     const db = await dbPromise;
     const tx = db.transaction("favorites", "readwrite");
     const store = tx.objectStore("favorites");
-    await store.put(card); // Put or update card in the store
-    await tx.done; // Ensure transaction is completed
+    await store.put(card);
+    await tx.done;
   } catch (error) {
     console.error("Failed to add favorite:", error);
   }
 };
 
-// Remove favorite card
+// Remove a favorite card
 export const removeFavorite = async (cardId: string) => {
   try {
     const db = await dbPromise;
     const tx = db.transaction("favorites", "readwrite");
     const store = tx.objectStore("favorites");
-    await store.delete(cardId); // Delete card by its ID
-    await tx.done; // Ensure transaction is completed
+    await store.delete(cardId);
+    await tx.done;
   } catch (error) {
     console.error("Failed to remove favorite:", error);
   }
@@ -52,8 +54,8 @@ export const getFavorites = async (): Promise<Card[]> => {
     const db = await dbPromise;
     const tx = db.transaction("favorites", "readonly");
     const store = tx.objectStore("favorites");
-    const favorites = await store.getAll(); // Retrieve all cards from the store
-    await tx.done; // Ensure transaction is completed
+    const favorites = await store.getAll();
+    await tx.done;
     return favorites;
   } catch (error) {
     console.error("Failed to get favorites:", error);
@@ -67,8 +69,8 @@ export const clearAllFavorites = async () => {
     const db = await dbPromise;
     const tx = db.transaction("favorites", "readwrite");
     const store = tx.objectStore("favorites");
-    await store.clear(); // Clear all entries from the store
-    await tx.done; // Ensure transaction is completed
+    await store.clear();
+    await tx.done;
   } catch (error) {
     console.error("Failed to clear all favorites:", error);
   }
@@ -101,9 +103,59 @@ export const loadSettingsFromIndexedDB = async (): Promise<SettingsState> => {
       return { offlineMode: result.offlineMode, themeMode: result.themeMode };
     }
     console.log("No settings found, returning default settings");
-    return defaultSettings; // Return default settings if no settings are found
+    return defaultSettings;
   } catch (error) {
     console.error("Failed to load settings:", error);
-    return defaultSettings; // Return default settings in case of error
+    return defaultSettings;
+  }
+};
+
+// Save an array of cards to IndexedDB
+export const saveCardsToCatalog = async (cards: Card[]) => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readwrite");
+    const store = tx.objectStore("catalog");
+
+    cards.forEach((card) => {
+      if (!card.cardId) {
+        console.error('Card is missing "cardId" field', card);
+        return;
+      }
+      store.put(card);
+    });
+
+    await tx.done;
+  } catch (error) {
+    console.error("Failed to save cards to catalog:", error);
+  }
+};
+
+// Get the number of cards in the catalog
+export const getCatalogCount = async (): Promise<number> => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readonly");
+    const store = tx.objectStore("catalog");
+    const count = await store.count();
+    await tx.done;
+    return count;
+  } catch (error) {
+    console.error("Failed to get catalog count:", error);
+    return 0;
+  }
+};
+
+// Clear all cards from the 'catalog' store
+export const clearCatalog = async () => {
+  try {
+    const db = await dbPromise;
+    const tx = db.transaction("catalog", "readwrite");
+    const store = tx.objectStore("catalog");
+    await store.clear();
+    await tx.done;
+    console.log("Catalog cleared successfully");
+  } catch (error) {
+    console.error("Failed to clear catalog:", error);
   }
 };
